@@ -18,7 +18,7 @@ const CATEGORY_KEYWORDS: Record<string, RegExp[]> = {
   "seti-telekom": [/сети|сетев/i, /tcp|ip|osi/i, /телеком/i],
   "teoriya-informacii": [/информац/i, /кодирован/i, /шеннон/i],
   fizika: [/физик/i, /механик/i, /электрич/i],
-  "kafedra-iu5": [/кафед��/i, /методич/i, /презентац/i, /ИУ-?5/i, /шпаргал/i],
+  "kafedra-iu5": [/кафедр/i, /методич/i, /презентац/i, /ИУ-?5/i, /шпаргал/i],
 };
 
 function detectCategorySlug(path: string): string | undefined {
@@ -97,8 +97,9 @@ export const indexYandex: RequestHandler = async (req, res) => {
     const sources = keys.length ? keys : YADISK_PUBLIC_KEYS;
 
     const all: YandexIndexedItem[] = [];
-    for (const key of sources) {
-      const listed = await listFolder(key);
+    for (const raw of sources) {
+      const { key, initialPath } = parsePublicKey(raw);
+      const listed = await listFolder(key, initialPath);
       all.push(...listed);
     }
 
