@@ -5,23 +5,24 @@ import { YADISK_PUBLIC_KEYS } from "@shared/sources";
 const API_BASE = "https://cloud-api.yandex.net/v1/disk";
 
 function detectSemester(path: string): number | null {
-  const m = path.match(/(^|\b|\/)\s*([1-8])\s*(?:семестр|сем|sem)\b/i);
+  const decoded = decodeURIComponent(path);
+  const m = decoded.match(/(^|\b|\/)\s*([1-8])\s*(?:семестр|сем|sem)\b/i);
   return m ? Number(m[2]) : null;
 }
 
 const CATEGORY_KEYWORDS: Record<string, RegExp[]> = {
   "visshaya-matematika": [/матан/i, /высшая/i, /линал/i, /дифф/i, /математ/i],
-  programmirovanie: [/программ/i, /алгоритм/i, /python/i, /c\+\+|c\b/i],
+  programmirovanie: [/программ/i, /прога/i, /оп\b|основы программ/i, /алгоритм/i, /python/i, /c\+\+|\bc(?!loud)/i, /java\b/i, /js|javascript|typescript/i],
   "kompyuternaya-arhitektura": [/архитектур/i, /асм|asm/i, /микропроц/i],
   "shemo-tehnika": [/схемотех/i, /логик/i, /цап|ацп/i],
   "seti-telekom": [/сети|сетев/i, /tcp|ip|osi/i, /телеком/i],
   "teoriya-informacii": [/информац/i, /кодирован/i, /шеннон/i],
   fizika: [/физик/i, /механик/i, /электрич/i],
-  "kafedra-iu5": [/кафедр/i, /методич/i, /презентац/i, /ИУ-?5/i],
+  "kafedra-iu5": [/кафедр/i, /методич/i, /презентац/i, /ИУ-?5/i, /шпаргал/i],
 };
 
 function detectCategorySlug(path: string): string | undefined {
-  const lower = path.toLowerCase();
+  const lower = decodeURIComponent(path.toLowerCase());
   for (const [slug, regs] of Object.entries(CATEGORY_KEYWORDS)) {
     if (regs.some((r) => r.test(lower))) return slug;
   }
@@ -52,8 +53,9 @@ async function listFolder(publicKey: string, subPath = ""): Promise<YandexIndexe
         size: typeof it.size === "number" ? it.size : undefined,
         mime: it.mime_type ?? null,
       };
-      entry.semester = detectSemester(p);
-      entry.categorySlug = detectCategorySlug(p) || detectCategorySlug(json.name || "");
+      entry.semester = detectSemester(p) ?? detectSemester(publicKey);
+      entry.categorySlug =
+        detectCategorySlug(p) || detectCategorySlug(json.name || "") || detectCategorySlug(publicKey) || "kafedra-iu5";
       items.push(entry);
       if (it.type === "dir") {
         const sub = await listFolder(publicKey, p);
