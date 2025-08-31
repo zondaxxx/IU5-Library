@@ -11,7 +11,10 @@ export const rawYandex: RequestHandler = async (req, res) => {
   try {
     const r = await fetch(url.toString());
     const text = await r.text();
-    res.status(r.status).setHeader("content-type", "application/json; charset=utf-8").send(text);
+    res
+      .status(r.status)
+      .setHeader("content-type", "application/json; charset=utf-8")
+      .send(text);
   } catch (e: any) {
     res.status(500).json({ error: String(e?.message || e) });
   }

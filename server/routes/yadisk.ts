@@ -12,7 +12,16 @@ function detectSemester(path: string): number | null {
 
 const CATEGORY_KEYWORDS: Record<string, RegExp[]> = {
   "visshaya-matematika": [/матан/i, /высшая/i, /линал/i, /дифф/i, /математ/i],
-  programmirovanie: [/программ/i, /прога/i, /оп\b|основы программ/i, /алгоритм/i, /python/i, /c\+\+|\bc(?!loud)/i, /java\b/i, /js|javascript|typescript/i],
+  programmirovanie: [
+    /программ/i,
+    /прога/i,
+    /оп\b|основы программ/i,
+    /алгоритм/i,
+    /python/i,
+    /c\+\+|\bc(?!loud)/i,
+    /java\b/i,
+    /js|javascript|typescript/i,
+  ],
   "kompyuternaya-arhitektura": [/архитектур/i, /асм|asm/i, /микропроц/i],
   "shemo-tehnika": [/схемотех/i, /логик/i, /цап|ацп/i],
   "seti-telekom": [/сети|сетев/i, /tcp|ip|osi/i, /телеком/i],
@@ -34,7 +43,9 @@ function parsePublicKey(link: string): { key: string; initialPath: string } {
     const u = new URL(link);
     // Pattern: /d/<id>/optional/path
     const parts = u.pathname.split("/").filter(Boolean);
-    const idx = parts.findIndex((p) => p === "d" || p === "i" || p === "disk" || p === "public");
+    const idx = parts.findIndex(
+      (p) => p === "d" || p === "i" || p === "disk" || p === "public",
+    );
     if (idx >= 0 && parts[idx + 1]) {
       const id = parts[idx + 1];
       const rest = parts.slice(idx + 2).join("/");
@@ -47,7 +58,10 @@ function parsePublicKey(link: string): { key: string; initialPath: string } {
   }
 }
 
-async function listFolder(publicKey: string, subPath = ""): Promise<YandexIndexedItem[]> {
+async function listFolder(
+  publicKey: string,
+  subPath = "",
+): Promise<YandexIndexedItem[]> {
   const items: YandexIndexedItem[] = [];
   let offset = 0;
   const limit = 200;
@@ -79,7 +93,10 @@ async function listFolder(publicKey: string, subPath = ""): Promise<YandexIndexe
       };
       entry.semester = detectSemester(p) ?? detectSemester(publicKey);
       entry.categorySlug =
-        detectCategorySlug(p) || detectCategorySlug(json.name || "") || detectCategorySlug(publicKey) || "kafedra-iu5";
+        detectCategorySlug(p) ||
+        detectCategorySlug(json.name || "") ||
+        detectCategorySlug(publicKey) ||
+        "kafedra-iu5";
       items.push(entry);
       if (it.type === "dir") {
         try {

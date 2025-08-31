@@ -1,6 +1,16 @@
 import { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
-import { Search, BookOpen, Code2, Calculator, Cpu, Layers, Network, Binary, Atom } from "lucide-react";
+import {
+  Search,
+  BookOpen,
+  Code2,
+  Calculator,
+  Cpu,
+  Layers,
+  Network,
+  Binary,
+  Atom,
+} from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
@@ -90,9 +100,11 @@ export default function Index() {
     return CATEGORIES.filter((c) => {
       const q = query.trim().toLowerCase();
       const matchesQuery = q
-        ? c.title.toLowerCase().includes(q) || c.tags.some((t) => t.toLowerCase().includes(q))
+        ? c.title.toLowerCase().includes(q) ||
+          c.tags.some((t) => t.toLowerCase().includes(q))
         : true;
-      const matchesSemester = semester === "all" ? true : c.semesters.includes(Number(semester));
+      const matchesSemester =
+        semester === "all" ? true : c.semesters.includes(Number(semester));
       return matchesQuery && matchesSemester;
     });
   }, [query, semester]);
@@ -106,15 +118,33 @@ export default function Index() {
           <h2 className="text-lg font-semibold tracking-tight">Разделы</h2>
           <Tabs value={semester} onValueChange={setSemester}>
             <TabsList className="rounded-full">
-              <TabsTrigger value="all" className="rounded-full">Все</TabsTrigger>
-              <TabsTrigger value="1" className="rounded-full">1 семестр</TabsTrigger>
-              <TabsTrigger value="2" className="rounded-full">2</TabsTrigger>
-              <TabsTrigger value="3" className="rounded-full">3</TabsTrigger>
-              <TabsTrigger value="4" className="rounded-full">4</TabsTrigger>
-              <TabsTrigger value="5" className="rounded-full">5</TabsTrigger>
-              <TabsTrigger value="6" className="rounded-full">6</TabsTrigger>
-              <TabsTrigger value="7" className="rounded-full">7</TabsTrigger>
-              <TabsTrigger value="8" className="rounded-full">8</TabsTrigger>
+              <TabsTrigger value="all" className="rounded-full">
+                Все
+              </TabsTrigger>
+              <TabsTrigger value="1" className="rounded-full">
+                1 семестр
+              </TabsTrigger>
+              <TabsTrigger value="2" className="rounded-full">
+                2
+              </TabsTrigger>
+              <TabsTrigger value="3" className="rounded-full">
+                3
+              </TabsTrigger>
+              <TabsTrigger value="4" className="rounded-full">
+                4
+              </TabsTrigger>
+              <TabsTrigger value="5" className="rounded-full">
+                5
+              </TabsTrigger>
+              <TabsTrigger value="6" className="rounded-full">
+                6
+              </TabsTrigger>
+              <TabsTrigger value="7" className="rounded-full">
+                7
+              </TabsTrigger>
+              <TabsTrigger value="8" className="rounded-full">
+                8
+              </TabsTrigger>
             </TabsList>
           </Tabs>
         </div>
@@ -129,14 +159,23 @@ export default function Index() {
   );
 }
 
-function Hero({ query, onQuery }: { query: string; onQuery: (v: string) => void }) {
+function Hero({
+  query,
+  onQuery,
+}: {
+  query: string;
+  onQuery: (v: string) => void;
+}) {
   return (
     <section className="rounded-2xl border bg-card/70 p-6 sm:p-8">
       <div className="flex flex-col gap-6">
         <div>
-          <h1 className="text-3xl sm:text-4xl font-semibold tracking-tight">Библиотека материалов · ИУ-5</h1>
+          <h1 className="text-3xl sm:text-4xl font-semibold tracking-tight">
+            Библиотека материалов · ИУ-5
+          </h1>
           <p className="mt-2 text-muted-foreground max-w-2xl">
-            Структурированная методичка со ссылками и файлами: предметы, семестры, шпаргалки и полезные ресурсы. Минималистично — как в iOS.
+            Структурированная методичка со ссылками и файлами: предметы,
+            семестры, шпаргалки и полезные ресурсы. Минималистично — как в iOS.
           </p>
         </div>
 
@@ -161,7 +200,11 @@ function Hero({ query, onQuery }: { query: string; onQuery: (v: string) => void 
             "сети",
             "кодирование",
           ].map((t) => (
-            <Badge key={t} variant="secondary" className="rounded-full px-3 py-1">
+            <Badge
+              key={t}
+              variant="secondary"
+              className="rounded-full px-3 py-1"
+            >
               {t}
             </Badge>
           ))}
@@ -177,14 +220,20 @@ function CategoryCard({ c }: { c: Category }) {
     <Card className="p-5 hover:shadow-md transition-shadow rounded-2xl">
       <Link to={`/c/${c.slug}`} className="block">
         <div className="flex items-start gap-4">
-          <div className={`size-11 rounded-2xl grid place-items-center ${c.color}`}>
+          <div
+            className={`size-11 rounded-2xl grid place-items-center ${c.color}`}
+          >
             <Icon className="size-5" />
           </div>
           <div className="flex-1 min-w-0">
-            <h3 className="text-base font-semibold leading-tight tracking-tight line-clamp-1">{c.title}</h3>
+            <h3 className="text-base font-semibold leading-tight tracking-tight line-clamp-1">
+              {c.title}
+            </h3>
             <div className="mt-1 flex items-center gap-1.5 flex-wrap">
               {c.tags.map((t) => (
-                <span key={t} className="text-xs text-muted-foreground">#{t}</span>
+                <span key={t} className="text-xs text-muted-foreground">
+                  #{t}
+                </span>
               ))}
             </div>
           </div>

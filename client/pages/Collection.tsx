@@ -2,7 +2,14 @@ import { useEffect, useMemo, useState } from "react";
 import { useParams } from "react-router-dom";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import { YandexIndexResponse, YandexIndexedItem } from "@shared/api";
 import { YADISK_PUBLIC_KEYS } from "@shared/sources";
 
@@ -26,20 +33,34 @@ export default function CollectionPage() {
     return items
       .filter((i) => i.categorySlug === slug)
       .filter((i) => (sem === "all" ? true : i.semester === Number(sem)))
-      .filter((i) => (q ? (i.name + " " + i.path).toLowerCase().includes(q.toLowerCase()) : true))
+      .filter((i) =>
+        q
+          ? (i.name + " " + i.path).toLowerCase().includes(q.toLowerCase())
+          : true,
+      )
       .slice(0, 2000);
   }, [items, slug, q, sem]);
 
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-3xl font-semibold tracking-tight">{formatSlug(slug || "")}</h1>
-        <p className="mt-2 text-muted-foreground">Автоматически индексированные мате��иалы с Яндекс.Диска (просмотр без скачивания). Фильтры по семестрам и поиску.</p>
+        <h1 className="text-3xl font-semibold tracking-tight">
+          {formatSlug(slug || "")}
+        </h1>
+        <p className="mt-2 text-muted-foreground">
+          Автоматически индексированные мате��иалы с Яндекс.Диска (просмотр без
+          скачивания). Фильтры по семестрам и поиску.
+        </p>
       </div>
 
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div className="relative w-full sm:max-w-md">
-          <Input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Поиск в разделе" className="rounded-full" />
+          <Input
+            value={q}
+            onChange={(e) => setQ(e.target.value)}
+            placeholder="Поиск в разделе"
+            className="rounded-full"
+          />
         </div>
         <div className="flex items-center gap-2 flex-wrap">
           {(["all", 1, 2, 3, 4, 5, 6, 7, 8] as const).map((s) => (
@@ -55,7 +76,9 @@ export default function CollectionPage() {
       </div>
 
       {list.length === 0 ? (
-        <div className="rounded-2xl border p-10 text-center text-muted-foreground">Нет материалов — возможно, меняем фильтры или пришлите ещё ссылки.</div>
+        <div className="rounded-2xl border p-10 text-center text-muted-foreground">
+          Нет материалов — возможно, меняем фильтры или пришлите ещё ссылки.
+        </div>
       ) : (
         <div className="rounded-2xl border overflow-hidden">
           <Table>
@@ -73,13 +96,28 @@ export default function CollectionPage() {
                 <TableRow key={`${f.publicKey}:${f.path}`}>
                   <TableCell>
                     <div className="flex items-center gap-2">
-                      <span className="truncate max-w-[52vw] sm:max-w-[40vw] md:max-w-[28vw]">{f.name}</span>
-                      {f.mime ? <Badge variant="secondary" className="hidden md:inline-flex rounded-full">{f.mime.split("/")[1] || f.mime}</Badge> : null}
+                      <span className="truncate max-w-[52vw] sm:max-w-[40vw] md:max-w-[28vw]">
+                        {f.name}
+                      </span>
+                      {f.mime ? (
+                        <Badge
+                          variant="secondary"
+                          className="hidden md:inline-flex rounded-full"
+                        >
+                          {f.mime.split("/")[1] || f.mime}
+                        </Badge>
+                      ) : null}
                     </div>
                   </TableCell>
-                  <TableCell className="hidden sm:table-cell capitalize">{f.type}</TableCell>
-                  <TableCell className="hidden sm:table-cell">{f.semester ?? "—"}</TableCell>
-                  <TableCell className="hidden md:table-cell text-muted-foreground">{f.path.replace(/\/[^/]+$/, "") || "/"}</TableCell>
+                  <TableCell className="hidden sm:table-cell capitalize">
+                    {f.type}
+                  </TableCell>
+                  <TableCell className="hidden sm:table-cell">
+                    {f.semester ?? "—"}
+                  </TableCell>
+                  <TableCell className="hidden md:table-cell text-muted-foreground">
+                    {f.path.replace(/\/[^/]+$/, "") || "/"}
+                  </TableCell>
                   <TableCell>
                     {f.type === "file" ? (
                       <a
