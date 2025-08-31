@@ -24,6 +24,7 @@ export function createServer() {
   // Yandex public indexing and open proxy
   app.get("/api/yadisk/index", indexYandex);
   app.get("/api/yadisk/file", openYandexFile);
+  app.get("/api/yadisk/raw", rawYandex);
 
   return app;
 }
