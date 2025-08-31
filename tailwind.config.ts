@@ -13,6 +13,23 @@ export default {
       },
     },
     extend: {
+      fontFamily: {
+        sans: [
+          "ui-sans-serif",
+          "-apple-system",
+          "BlinkMacSystemFont",
+          "Segoe UI",
+          "Inter",
+          "Roboto",
+          "Helvetica Neue",
+          "Arial",
+          "Noto Sans",
+          "Apple Color Emoji",
+          "Segoe UI Emoji",
+          "Segoe UI Symbol",
+          "Noto Color Emoji",
+        ],
+      },
       colors: {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
@@ -59,6 +76,7 @@ export default {
         },
       },
       borderRadius: {
+        xl: "calc(var(--radius) + 4px)",
         lg: "var(--radius)",
         md: "calc(var(--radius) - 2px)",
         sm: "calc(var(--radius) - 4px)",
