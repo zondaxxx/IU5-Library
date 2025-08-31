@@ -27,8 +27,7 @@ export default function CollectionPage() {
       .filter((i) => i.categorySlug === slug)
       .filter((i) => (sem === "all" ? true : i.semester === Number(sem)))
       .filter((i) => (q ? (i.name + " " + i.path).toLowerCase().includes(q.toLowerCase()) : true))
-      .filter((i) => i.type === "file")
-      .slice(0, 1000);
+      .slice(0, 2000);
   }, [items, slug, q, sem]);
 
   return (
