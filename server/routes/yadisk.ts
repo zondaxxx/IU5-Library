@@ -39,7 +39,7 @@ function parsePublicKey(link: string): { key: string; initialPath: string } {
       const id = parts[idx + 1];
       const rest = parts.slice(idx + 2).join("/");
       const base = `${u.origin}/${parts[idx]}/${id}`;
-      return { key: base, initialPath: rest ? `/${decodeURIComponent(rest)}` : "" };
+      return { key: base, initialPath: rest ? decodeURIComponent(rest) : "" };
     }
     return { key: link, initialPath: "" };
   } catch {
