@@ -34,7 +34,7 @@ export default function CollectionPage() {
     <div className="space-y-6">
       <div>
         <h1 className="text-3xl font-semibold tracking-tight">{formatSlug(slug || "")}</h1>
-        <p className="mt-2 text-muted-foreground">Автоматически индексированные материалы с Яндекс.Диска (просмотр без скачивания). Фильтры по семестрам и поиску.</p>
+        <p className="mt-2 text-muted-foreground">Автоматически индексированные мате��иалы с Яндекс.Диска (просмотр без скачивания). Фильтры по семестрам и поиску.</p>
       </div>
 
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
@@ -77,17 +77,29 @@ export default function CollectionPage() {
                       {f.mime ? <Badge variant="secondary" className="hidden md:inline-flex rounded-full">{f.mime.split("/")[1] || f.mime}</Badge> : null}
                     </div>
                   </TableCell>
+                  <TableCell className="hidden sm:table-cell capitalize">{f.type}</TableCell>
                   <TableCell className="hidden sm:table-cell">{f.semester ?? "—"}</TableCell>
                   <TableCell className="hidden md:table-cell text-muted-foreground">{f.path.replace(/\/[^/]+$/, "") || "/"}</TableCell>
                   <TableCell>
-                    <a
-                      className="text-primary hover:underline"
-                      href={`/api/yadisk/file?key=${encodeURIComponent(f.publicKey)}&path=${encodeURIComponent(f.path)}`}
-                      target="_blank"
-                      rel="noreferrer"
-                    >
-                      Открыть
-                    </a>
+                    {f.type === "file" ? (
+                      <a
+                        className="text-primary hover:underline"
+                        href={`/api/yadisk/file?key=${encodeURIComponent(f.publicKey)}&path=${encodeURIComponent(f.path)}`}
+                        target="_blank"
+                        rel="noreferrer"
+                      >
+                        Скачать/открыть
+                      </a>
+                    ) : (
+                      <a
+                        className="text-primary hover:underline"
+                        href={`${f.publicKey}?path=/${encodeURIComponent(f.path)}`}
+                        target="_blank"
+                        rel="noreferrer"
+                      >
+                        Открыть папку
+                      </a>
+                    )}
                   </TableCell>
                 </TableRow>
               ))}
