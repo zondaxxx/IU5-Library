@@ -2,6 +2,7 @@ import "dotenv/config";
 import express from "express";
 import cors from "cors";
 import { handleDemo } from "./routes/demo";
+import { indexYandex, openYandexFile } from "./routes/yadisk";
 
 export function createServer() {
   const app = express();
@@ -18,6 +19,10 @@ export function createServer() {
   });
 
   app.get("/api/demo", handleDemo);
+
+  // Yandex public indexing and open proxy
+  app.get("/api/yadisk/index", indexYandex);
+  app.get("/api/yadisk/file", openYandexFile);
 
   return app;
 }
