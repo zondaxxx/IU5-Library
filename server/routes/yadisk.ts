@@ -1,6 +1,6 @@
 import type { RequestHandler } from "express";
-import { YandexIndexResponse, YandexIndexedItem } from "@shared/api";
-import { YADISK_PUBLIC_KEYS } from "@shared/sources";
+import { YandexIndexResponse, YandexIndexedItem } from "../../shared/api";
+import { YADISK_PUBLIC_KEYS } from "../../shared/sources";
 
 const API_BASE = "https://cloud-api.yandex.net/v1/disk";
 
@@ -13,7 +13,7 @@ function detectSemester(path: string): number | null {
 const CATEGORY_KEYWORDS: Record<string, RegExp[]> = {
   "visshaya-matematika": [/матан/i, /высшая/i, /линал/i, /дифф/i, /математ/i],
   programmirovanie: [/программ/i, /прога/i, /оп\b|основы программ/i, /алгоритм/i, /python/i, /c\+\+|\bc(?!loud)/i, /java\b/i, /js|javascript|typescript/i],
-  "kompyuternaya-arhitektura": [/архитектур/i, /асм|asm/i, /микропроц/i],
+  "kompyuternaya-arhitektura": [/архитектур/i, /асм|asm/i, /микро��роц/i],
   "shemo-tehnika": [/схемотех/i, /логик/i, /цап|ацп/i],
   "seti-telekom": [/сети|сетев/i, /tcp|ip|osi/i, /телеком/i],
   "teoriya-informacii": [/информац/i, /кодирован/i, /шеннон/i],
