@@ -58,7 +58,13 @@ async function listFolder(publicKey: string, subPath = ""): Promise<YandexIndexe
     url.searchParams.set("limit", String(limit));
     url.searchParams.set("offset", String(offset));
     const res = await fetch(url.toString());
-    if (!res.ok) throw new Error(`Yandex API error ${res.status}`);
+    if (!res.ok) {
+      if (res.status === 404) {
+        // Path may not exist or is not accessible; stop at this branch.
+        break;
+      }
+      throw new Error(`Yandex API error ${res.status}`);
+    }
     const json = await res.json();
     const embedded = json._embedded?.items ?? [];
     for (const it of embedded) {
@@ -76,13 +82,17 @@ async function listFolder(publicKey: string, subPath = ""): Promise<YandexIndexe
         detectCategorySlug(p) || detectCategorySlug(json.name || "") || detectCategorySlug(publicKey) || "kafedra-iu5";
       items.push(entry);
       if (it.type === "dir") {
-        const sub = await listFolder(publicKey, p);
-        items.push(...sub);
+        try {
+          const sub = await listFolder(publicKey, p);
+          items.push(...sub);
+        } catch {
+          // skip problematic subfolder
+        }
       }
     }
     const total = json._embedded?.total ?? embedded.length;
     offset += embedded.length;
-    if (offset >= total) break;
+    if (offset >= total || embedded.length === 0) break;
   }
   return items;
 }
