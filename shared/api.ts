@@ -10,3 +10,18 @@
 export interface DemoResponse {
   message: string;
 }
+
+export interface YandexIndexedItem {
+  publicKey: string;
+  path: string;
+  name: string;
+  type: "file" | "dir";
+  size?: number;
+  mime?: string | null;
+  categorySlug?: string;
+  semester?: number | null;
+}
+
+export interface YandexIndexResponse {
+  items: YandexIndexedItem[];
+}
