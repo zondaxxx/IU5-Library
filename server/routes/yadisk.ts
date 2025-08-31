@@ -99,8 +99,17 @@ export const indexYandex: RequestHandler = async (req, res) => {
     const all: YandexIndexedItem[] = [];
     for (const raw of sources) {
       const { key, initialPath } = parsePublicKey(raw);
-      const listed = await listFolder(key, initialPath);
-      all.push(...listed);
+      try {
+        const listed = await listFolder(key, initialPath);
+        all.push(...listed);
+      } catch (e: any) {
+        if (String(e?.message || e).includes("404")) {
+          const listedRoot = await listFolder(key);
+          all.push(...listedRoot);
+        } else {
+          throw e;
+        }
+      }
     }
 
     const response: YandexIndexResponse = { items: all };
