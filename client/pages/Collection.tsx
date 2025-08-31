@@ -61,10 +61,11 @@ export default function CollectionPage() {
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>Файл</TableHead>
+                <TableHead>Название</TableHead>
+                <TableHead className="hidden sm:table-cell">Тип</TableHead>
                 <TableHead className="hidden sm:table-cell">Семестр</TableHead>
                 <TableHead className="hidden md:table-cell">Путь</TableHead>
-                <TableHead className="w-24">Действие</TableHead>
+                <TableHead className="w-28">Действие</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
