@@ -13,12 +13,12 @@ function detectSemester(path: string): number | null {
 const CATEGORY_KEYWORDS: Record<string, RegExp[]> = {
   "visshaya-matematika": [/матан/i, /высшая/i, /линал/i, /дифф/i, /математ/i],
   programmirovanie: [/программ/i, /прога/i, /оп\b|основы программ/i, /алгоритм/i, /python/i, /c\+\+|\bc(?!loud)/i, /java\b/i, /js|javascript|typescript/i],
-  "kompyuternaya-arhitektura": [/архитектур/i, /асм|asm/i, /микро��роц/i],
+  "kompyuternaya-arhitektura": [/архитектур/i, /асм|asm/i, /микропроц/i],
   "shemo-tehnika": [/схемотех/i, /логик/i, /цап|ацп/i],
   "seti-telekom": [/сети|сетев/i, /tcp|ip|osi/i, /телеком/i],
   "teoriya-informacii": [/информац/i, /кодирован/i, /шеннон/i],
   fizika: [/физик/i, /механик/i, /электрич/i],
-  "kafedra-iu5": [/кафедр/i, /методич/i, /презентац/i, /ИУ-?5/i, /шпаргал/i],
+  "kafedra-iu5": [/кафед��/i, /методич/i, /презентац/i, /ИУ-?5/i, /шпаргал/i],
 };
 
 function detectCategorySlug(path: string): string | undefined {
@@ -27,6 +27,24 @@ function detectCategorySlug(path: string): string | undefined {
     if (regs.some((r) => r.test(lower))) return slug;
   }
   return undefined;
+}
+
+function parsePublicKey(link: string): { key: string; initialPath: string } {
+  try {
+    const u = new URL(link);
+    // Pattern: /d/<id>/optional/path
+    const parts = u.pathname.split("/").filter(Boolean);
+    const idx = parts.findIndex((p) => p === "d" || p === "i" || p === "disk" || p === "public");
+    if (idx >= 0 && parts[idx + 1]) {
+      const id = parts[idx + 1];
+      const rest = parts.slice(idx + 2).join("/");
+      const base = `${u.origin}/${parts[idx]}/${id}`;
+      return { key: base, initialPath: rest ? `/${decodeURIComponent(rest)}` : "" };
+    }
+    return { key: link, initialPath: "" };
+  } catch {
+    return { key: link, initialPath: "" };
+  }
 }
 
 async function listFolder(publicKey: string, subPath = ""): Promise<YandexIndexedItem[]> {
@@ -58,7 +76,7 @@ async function listFolder(publicKey: string, subPath = ""): Promise<YandexIndexe
         detectCategorySlug(p) || detectCategorySlug(json.name || "") || detectCategorySlug(publicKey) || "kafedra-iu5";
       items.push(entry);
       if (it.type === "dir") {
-        const sub = await listFolder(publicKey, p);
+        const sub = await listFolder(publicKey, p.startsWith("/") ? p : `/${p}`);
         items.push(...sub);
       }
     }
