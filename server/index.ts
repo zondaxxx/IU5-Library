@@ -3,6 +3,7 @@ import express from "express";
 import cors from "cors";
 import { handleDemo } from "./routes/demo";
 import { indexYandex, openYandexFile } from "./routes/yadisk";
+import { rawYandex } from "./routes/yadisk-debug";
 
 export function createServer() {
   const app = express();
