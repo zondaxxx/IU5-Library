@@ -76,7 +76,7 @@ async function listFolder(publicKey: string, subPath = ""): Promise<YandexIndexe
         detectCategorySlug(p) || detectCategorySlug(json.name || "") || detectCategorySlug(publicKey) || "kafedra-iu5";
       items.push(entry);
       if (it.type === "dir") {
-        const sub = await listFolder(publicKey, p.startsWith("/") ? p : `/${p}`);
+        const sub = await listFolder(publicKey, p);
         items.push(...sub);
       }
     }
